@@ -1,0 +1,33 @@
+[
+  {"pk"    :  1, 
+   "model" :  "usercards.usercard", 
+   "fields": { 
+               "bio"              : "Bio", 
+               "last_name"        : "Shvetsov", 
+               "name"             : "Andrey", 
+               "contacts"         : "My contacts", 
+               "date_birth"       : "1982-10-11", 
+               "other_contacts"   : "No other contacts", 
+               "skype"            : "igri4on", 
+               "jabber"           : "no jabber", 
+               "email"            : "igri4on@gmail.com"
+             }
+  },
+  {"pk"    : 1, 
+   "model" : "auth.user", 
+   "fields": {
+               "username"         : "admin", 
+               "first_name"       : "", 
+               "last_name"        : "", 
+               "is_active"        : true, 
+               "is_superuser"     : true, 
+               "is_staff"         : true, 
+               "last_login"       : "2011-03-03 07:29:49", 
+               "groups"           : [], 
+               "user_permissions" : [], 
+               "password"         : "sha1$8975b$4c6a286c2235be37184e7c0977b28b488ac94b74", 
+               "email"            : "admin@example.com", 
+               "date_joined"      : "2011-03-03 07:29:49"
+             }
+   }
+]

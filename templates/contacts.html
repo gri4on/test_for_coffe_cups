@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}This is my User Card {% endblock %}
+
+{% block content %}
+<table border=1>
+        <tr><td width=5 nowrap><nobr>Name</nobr></td> <td>{{ card.name }}</td></tr>
+        <tr><td width=5 nowrap><nobr>Last Name</nobr></td><td>{{ card.last_name }}</td></tr>
+        <tr><td width=5 nowrap><nobr>Contacts</nobr></td><td>{{ card.contacts }}</td></tr>
+        <tr><td width=5 nowrap><nobr>Date of birth</nobr></td><td>{{ card.date_birth }}</td></tr>
+        <tr><td width=5 nowrap><nobr>Email</nobr></td><td>{{ card.email }}</td></tr>
+        <tr><td width=5 nowrap><nobr>Jabber</nobr></td><td>{{ card.jabber }}</td></tr>
+        <tr><td width=5 nowrap><nobr>Skype</nobr></td><td>{{ card.skype }}</td></tr>
+        <tr><td width=5 nowrap><nobr>Other contacts</nobr></td><td>{{ card.other_contacts }}</td></tr>
+        <tr><td width=5 nowrap><nobr>Bio</nobr></td><td>{{ card.bio }}</td></tr>
+</table>
+{% endblock %}

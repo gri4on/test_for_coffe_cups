@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}This is editable User Card {% endblock %}
+{% block media %} {{ form.media }} {% endblock %}
+
+{% block content %}
+
+<form action="/edit_usercard/" method="post">{% csrf_token %}
+<input type="submit" value="Save" />
+<table border="1">
+{{ form.as_table }}
+</table>
+</form>
+
+{% endblock %}
+
+

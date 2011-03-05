@@ -1,0 +1,18 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<title>{% block title %}{% endblock %}</title>
+{% block media %}{% endblock %}
+</head>
+<body>
+<div id="menu" style="float:left; margin-right:20px;">
+ <ul>
+  <li style=""><a href="/">Main Page</a></li>
+  <li style=""><a href="/edit_usercard/">Edir User Card</a></li>
+  <li style=""><a href="/middleware/">Middleware report</a></li>
+<ul>
+</div>
+
+{% block content %}{% endblock %}
+</body>
+</html>
