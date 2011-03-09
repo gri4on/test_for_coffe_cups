@@ -1,4 +1,4 @@
-from testforcups.usercards.models import MiddlewareData
+from test_for_coffe_cups.usercards.models import MiddlewareData
 
 
 class Middleware(object):
@@ -20,7 +20,10 @@ class Middleware(object):
 
         req.method = request.method
         req.uri = request.build_absolute_uri()
-        req.user_agent = request.META['HTTP_USER_AGENT']
+        if 'HTTP_USER_AGENT' in request.META.keys():
+            req.user_agent = request.META['HTTP_USER_AGENT']
+        else:
+            req.user_agent = ""
         req.uri = request.build_absolute_uri()
         req.addr = request.META['REMOTE_ADDR']
         req.save()

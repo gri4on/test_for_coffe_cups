@@ -1,5 +1,5 @@
 from django.forms import ModelForm
-from testforcups.usercards.models import UserCard
+from test_for_coffe_cups.usercards.models import UserCard
 import settings
 from django import forms
 

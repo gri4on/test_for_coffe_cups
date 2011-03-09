@@ -5,14 +5,7 @@
 {% block media %}{% endblock %}
 </head>
 <body>
-<div id="menu" style="float:left; margin-right:20px;">
- <ul>
-  <li style=""><a href="/">Main Page</a></li>
-  <li style=""><a href="/edit_usercard/">Edir User Card</a></li>
-  <li style=""><a href="/middleware/">Middleware report</a></li>
-<ul>
-</div>
-
+{% include "menu.html" %}
 {% block content %}{% endblock %}
 </body>
 </html>

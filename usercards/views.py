@@ -1,7 +1,7 @@
 from django.shortcuts import render_to_response
 from django.forms.models import model_to_dict
-from testforcups.usercards.models import UserCard, MiddlewareData
-from testforcups.usercards.forms import CardForm
+from test_for_coffe_cups.usercards.models import UserCard, MiddlewareData
+from test_for_coffe_cups.usercards.forms import CardForm
 from django.core.context_processors import csrf
 
 
