@@ -3,6 +3,7 @@ from django.test.client import Client
 from test_for_coffe_cups.usercards.models import UserCard
 import datetime
 from test_for_coffe_cups.usercards.models import MiddlewareData
+from django.conf import settings
 
 
 class UserCardTest(TestCase):
@@ -113,3 +114,19 @@ class TestEditUserCard(TestCase):
         self.failUnlessEqual(card.date_birth, datetime.date(1917, 11, 7))
         self.failUnlessEqual(card.other_contacts, "TestOtherContacts")
         self.failUnlessEqual(card.bio, "TestBio")
+
+
+class TestContextProcessor(TestCase):
+    def testHttp_1(self):
+        """Test on context processor page"""
+        client = Client()
+        response = client.get("/ctx_proc/")
+        settings_ctx = response.context['settings']
+        self.failUnlessEqual(settings_ctx.DATABASES, settings.DATABASES)
+
+    def testHttp_2(self):
+        """Test on main page"""
+        client = Client()
+        response = client.get("/")
+        settings_ctx = response.context['settings']
+        self.failUnlessEqual(settings_ctx.DATABASES, settings.DATABASES)

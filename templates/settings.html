@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}Result of context processor{% endblock %}
+{% block content %}
+<table border="1">
+<tr><td>Settings file</td></tr>
+<tr><td>TEMPLATE_CONTEXT_PROCESSORS</td><td>{{ settings.TEMPLATE_CONTEXT_PROCESSORS }}</td></tr>
+<tr><td>DATABASES</td><td>{{ settings.DATABASES }}</td></tr>
+</table>
+{% endblock %}
