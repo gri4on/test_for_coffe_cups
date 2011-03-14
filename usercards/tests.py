@@ -77,10 +77,29 @@ class TestMiddleware(TestCase):
 
 class TestEditUserCard(TestCase):
     def setUp(self):
+        # Do we need to create testUser or we can edit page with admin user ???
+         
         # create UserCard model with all fields
         client = Client()
         self.client = client
-        #response_get = client.get("/edit_usercard/")
+        
+        # Test authentication 
+        #  1. Test http redirect 
+        #     (if user is not authenticated - redirect to login page)
+        #  2. Test http auth 
+        #     (post auth data and check for redirect to 'edit page')
+        #  3. Edit data on page (post )
+        response_auth = client.get('/edit_usercard/')
+        
+        # redirect to auth page
+        self.failUnlessEqual(response_auth.status_code, 302)
+        response_auth = self.client.post('/accounts/login/',\
+                            {'username': 'admin', 'password': 'admin'})
+        # Redirect to edit page
+        self.failUnlessEqual(response_auth.status_code, 302)
+        response_auth = client.get("/edit_usercard/")
+        self.failUnlessEqual(response_auth.status_code, 200)
+        
         response = client.post('/edit_usercard/',\
                                  {'name'           : 'TestName',
                                   'last_name'      : 'TestLastName',
