@@ -35,7 +35,8 @@ def report_middleware(request):
     """
     Show all stored requests
     """
-    c = {"middleware_list": MiddlewareData.objects.all()}
+    # Show only first 10 requests
+    c = {"middleware_list": MiddlewareData.objects.all()[10:]}
     return render_to_response("middleware_report.html", \
                                    RequestContext(request, c))
 
