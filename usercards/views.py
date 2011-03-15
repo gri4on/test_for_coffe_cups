@@ -4,6 +4,7 @@ from test_for_coffe_cups.usercards.models import UserCard, MiddlewareData
 from test_for_coffe_cups.usercards.forms import CardForm
 from django.core.context_processors import csrf
 from django.template import RequestContext
+from django.contrib.auth.decorators import login_required
 
 
 def contact(request):
@@ -15,6 +16,7 @@ def contact(request):
                                    RequestContext(request, c))
 
 
+@login_required
 def edit_card(request):
     """
     Edit User card
