@@ -4,6 +4,18 @@
 
 {% block content %}
 
+<script type="text/javascript">
+/* <![CDATA[ */
+  $(document).ready(function() {
+     $("#id_date_birth").datepicker({ 
+                                      changeMonth: true,
+                                      changeYear : true,
+                                      dateFormat : 'yy-mm-dd',
+                                    });
+  })
+/* ]]> */
+</script>
+
 <form action="/edit_usercard/" method="post">{% csrf_token %}
 <input type="submit" value="Save" />
 <table border="1">
