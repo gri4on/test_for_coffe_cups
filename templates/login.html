@@ -1,5 +1,10 @@
-{% extends "base.html" %} {% block content %} {% if form.errors %}
+{% extends "base.html" %}
+{% block title %}Authentication required{% endblock %}
+{% block header %}<h1>Authentication required</h1>{% endblock %}
+{% block content %} {% if form.errors %}
+<div style="color:red;">
 <p>Sorry, login or password you provided was invalid.</p>
+</div>
 {% endif %}
 
 <form method="post" action="{% url django.contrib.auth.views.login %}">{% csrf_token %}

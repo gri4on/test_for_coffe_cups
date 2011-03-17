@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% block title %}This is editable User Card {% endblock %}
+{% block header %}<h1>This is editable User Card</h1>{% endblock %}
 {% block media %} {{ form.media }} {% endblock %}
 
 {% block content %}
@@ -7,20 +8,54 @@
 <script type="text/javascript">
 /* <![CDATA[ */
   $(document).ready(function() {
-     $("#id_date_birth").datepicker({ 
-                                      changeMonth: true,
-                                      changeYear : true,
-                                      dateFormat : 'yy-mm-dd',
-                                    });
+       $("#id_date_birth").datepicker({ 
+          changeMonth: true,
+          changeYear : true,
+          dateFormat : 'yy-mm-dd',
+       });
+ 
+   function onAjaxRun(){
+    var change_form = $($("#change_form")[0]);
+    // Disable form for User
+    change_form.find('input').each(function(index, value) {value.disabled=true;});
+    change_form.find('textarea').each(function(index, value) {value.disabled=true;});
+
+    // Show loader image
+    $("#loader").css('display', 'block').animate({opacity:1}, 'fast');
+   };
+
+  function onAjaxFinish() {
+    var change_form = $($("#change_form")[0]);
+    //Hide loader image
+    $("#loader").css({'display': 'none', 'opacity':0});
+    
+    // Enable editable tags: input and textarea
+    change_form.find('input').each(function(index, value) {value.disabled=false;});
+    change_form.find('textarea').each(function(index, value) {value.disabled=false;});
+  };
+   
+  // prepare Options Object 
+  var options = { 
+      target:     '#content_table',
+      beforeSubmit: onAjaxRun, // handler that runs before submit
+      success: onAjaxFinish
+  }; 
+ 
+  // Create ajaxForm form jquery.form plugin
+  $("#change_form").ajaxForm(options);
+ 
   })
 /* ]]> */
 </script>
 
-<form action="/edit_usercard/" method="post">{% csrf_token %}
-<input type="submit" value="Save" />
-<table border="1">
+<form action="/edit_usercard/" method="post" id="change_form">{% csrf_token %}
+<table id="content_table" border="1">
 {{ form.as_table }}
 </table>
+<input type="submit" value="Save" />
 </form>
 
+<div id="loader" style="position:absolute;display:none; left: 35%;top:200px; background:white;">
+  <img src="{{ MEDIA_URL }}img/ajax-loader.gif">
+</div>
 {% endblock %}
