@@ -1,11 +1,21 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 <head>
-<title>{% block title %}{% endblock %}</title>
+<title>Test for 42cc: {% block title %}{% endblock %}</title>
+<link rel=stylesheet href="/media/base.css" type="text/css" media=screen />
 {% block media %}{% endblock %}
 </head>
 <body>
-{% include "menu.html" %}
+<div id="container">
+<div id="header">
+{% block header %}{% endblock %}
+</div>
+<div id="wrapper">
 {% block content %}{% endblock %}
+</div>
+<div id="navigation">
+{% include "menu.html" %}
+</div>
+</div>
 </body>
 </html>

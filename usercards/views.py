@@ -5,6 +5,7 @@ from test_for_coffe_cups.usercards.forms import CardForm
 from django.core.context_processors import csrf
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
 
 
 def contact(request):
@@ -21,7 +22,16 @@ def edit_card(request):
     """
     Edit User card
     """
+    # Check if there is a submit form - then process it
     if request.method == "POST":
+        # Check if there is a ajax form -
+        #  then return just form html code without template ...
+        if request.is_ajax():
+            form = CardForm(request.POST, instance=UserCard.objects.all()[0])
+            if form.is_valid():
+                form.save()
+            return HttpResponse(form.as_table())
+
         form = CardForm(request.POST, instance=UserCard.objects.all()[0])
         if form.is_valid():
             form.save()
