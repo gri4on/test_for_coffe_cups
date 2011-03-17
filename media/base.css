@@ -1,0 +1,38 @@
+html,body{
+   margin:0;padding:0
+}
+
+body{
+   font: 76% arial,sans-serif
+}
+
+div#header{
+   position:relative
+}
+
+div#header h1{
+   height:80px;
+   line-height:80px;
+   margin:0;
+   padding-left:10px;
+   background: #EEE;
+   color: #79B30B
+}
+
+div#navigation{
+   background:#B9CAFF
+}
+
+div#wrapper{
+  float:right;width:80%
+}
+
+div#navigation{
+  float:left;
+  width:20%; 
+  min-width:100px;
+}
+
+div#menu{
+  height:100%;
+}
