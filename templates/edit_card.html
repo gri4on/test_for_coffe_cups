@@ -8,11 +8,16 @@
 <script type="text/javascript">
 /* <![CDATA[ */
   $(document).ready(function() {
+   function enableDatePicker(){
        $("#id_date_birth").datepicker({ 
           changeMonth: true,
           changeYear : true,
           dateFormat : 'yy-mm-dd',
        });
+   };
+
+   // Create datePicker
+   enableDatePicker();
  
    function onAjaxRun(){
     var change_form = $($("#change_form")[0]);
@@ -32,6 +37,7 @@
     // Enable editable tags: input and textarea
     change_form.find('input').each(function(index, value) {value.disabled=false;});
     change_form.find('textarea').each(function(index, value) {value.disabled=false;});
+    enableDatePicker();
   };
    
   // prepare Options Object 
