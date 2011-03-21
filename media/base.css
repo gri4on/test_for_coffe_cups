@@ -1,38 +1,54 @@
-html,body{
-   margin:0;padding:0
+html, body {
+    margin: 4;
+    padding: 4
 }
 
-body{
-   font: 76% arial,sans-serif
+body {
+    font: 76% arial;
+    font-family: Georgia, serif
 }
 
-div#header{
-   position:relative
+p {
+    margin: 0 10px 10px
 }
 
-div#header h1{
-   height:80px;
-   line-height:80px;
-   margin:0;
-   padding-left:10px;
-   background: #EEE;
-   color: #79B30B
+a {
+    display: block;
+    padding: 10px
 }
 
-div#navigation{
-   background:#B9CAFF
+div#header h1 {
+    height: 80px;
+    line-height: 80px;
+    margin: 0;
+    padding-left: 10px
 }
 
-div#wrapper{
-  float:right;width:80%
+div#content p {
+    line-height: 1.4
 }
 
-div#navigation{
-  float:left;
-  width:20%; 
-  min-width:100px;
+div#wrapper {
+    float: left;
+    width: 100%;
+    margin-left: -33%
 }
 
-div#menu{
-  height:100%;
+div#content {
+    margin-left: 33%
+}
+
+div#navigation {
+    float: right;
+    width: 32.9%
+}
+
+div#left_part {
+    float: left;
+    /* margin: 20px */
+}
+
+div#right_part {
+    /*float: left; */
+    margin-left: 25%;
 }
