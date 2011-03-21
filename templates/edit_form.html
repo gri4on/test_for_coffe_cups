@@ -1,7 +1,7 @@
 <form id="change_form" action="/edit_usercard/" method="POST">{% csrf_token %}
 <div style="float: left">
     <table>
-        {% for field in form %}
+        {% for field in form reversed %}
             {% if forloop.counter == 5 %}
     </table>
     </div>
