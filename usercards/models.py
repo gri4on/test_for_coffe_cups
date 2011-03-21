@@ -8,18 +8,18 @@ class UserCard(models.Model):
     """
     name = models.CharField(max_length=256)
     last_name = models.CharField(max_length=256)
+    date_birth = models.DateField(blank=True)
+    bio = models.TextField()
     contacts = models.CharField(max_length=256)
     email = models.CharField(max_length=256)
     jabber = models.CharField(max_length=256)
     skype = models.CharField(max_length=256)
-    date_birth = models.DateField(blank=True)
     other_contacts = models.TextField()
-    bio = models.TextField()
 
 
 class MiddlewareData(models.Model):
     """
-    that clas is represent model for request stored in DB
+    that class is represent model for request stored in DB
     """
     time = models.DateTimeField(auto_now=True)
     method = models.CharField(max_length=255)

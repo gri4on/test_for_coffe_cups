@@ -1,0 +1,57 @@
+<form id="change_form" action="/edit_usercard/" method="POST">{% csrf_token %}
+<div style="float: left">
+    <table>
+        {% for field in form %}
+            {% if forloop.counter == 5 %}
+    </table>
+    </div>
+    <div>
+    <table>
+            {% endif %}
+            {% if field.errors %}  
+        <tr>
+            <td></td>
+            <td>     
+                <span style="color: red;">
+                 {% for error in field.errors %}
+                    <strong>{{ error|escape }}</strong>
+                 {% endfor %}
+                </span>     
+            </td>
+        </tr>
+             {% endif %}
+        <tr>
+            <td>
+                {{ field.label_tag }}: 
+            </td>
+            <td>
+                {% if editable %}
+                    {{ field }}
+                {% else %}
+                    {{ field }}
+                {% endif %}
+            </td>
+        </tr>
+            {% if field.help_text %}} 
+        <tr><td></td>
+            <td>
+                {{ field.help_text }}
+            </td>
+        </tr>
+            {% endif %}    
+    
+      
+        {% endfor %}
+    </table>
+</div>
+<table>
+    <tr>
+        <td>
+  <input type="submit" value="Save"/>
+            </td>
+        <td>
+  <a href="javascript:window.history.back(1)">Cancel</a>
+    </td>
+</table>
+</form>
+

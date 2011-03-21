@@ -1,8 +1,16 @@
+{% if user.is_authenticated %}
+    <table>
+        <tr><td>User Name: </td><td>{{ user.username }}</td></tr>
+    </table>
 <div id="menu" style="float: left; margin-right: 20px;">
 <ul>
 	<li ><a href="/">Main Page</a></li>
-	<li ><a href="/edit_usercard/">Edir User Card</a></li>
-	<li ><a href="/middleware/">Middleware report</a></li>
+	<li ><a href="{% url card_edit %}">Edir User Card</a></li>
+	<li ><a href="{% url midl_report %}">Middleware report</a></li>
 	<li ><a href="{% url ctx_proc %}">Context processor</a></li>
+    <li ><a href="{% url logout_url %}">Logout</a></li>
 	<ul>
 </div>
+{% else %}
+    <a href="{% url login_url %}">Login</a>
+{% endif %}

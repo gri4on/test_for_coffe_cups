@@ -28,9 +28,10 @@ def edit_card(request):
         #  then return just form html code without template ...
         if request.is_ajax():
             form = CardForm(request.POST, instance=UserCard.objects.all()[0])
+            c = {"form": form}
             if form.is_valid():
                 form.save()
-            return HttpResponse(form.as_table())
+            return render_to_response("edit_form.html", RequestContext(request, c))
 
         form = CardForm(request.POST, instance=UserCard.objects.all()[0])
         if form.is_valid():

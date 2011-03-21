@@ -42,7 +42,7 @@
    
   // prepare Options Object 
   var options = { 
-      target:     '#content_table',
+      target:     '#edit_form',
       beforeSubmit: onAjaxRun, // handler that runs before submit
       success: onAjaxFinish
   }; 
@@ -53,15 +53,14 @@
   })
 /* ]]> */
 </script>
-
-<form action="/edit_usercard/" method="post" id="change_form">{% csrf_token %}
-<table id="content_table" border="1">
-{{ form.as_table }}
-</table>
-<input type="submit" value="Save" />
-</form>
+<div id="edit_form">
+{% include "edit_form.html" %}
+</div>
 
 <div id="loader" style="position:absolute;display:none; left: 35%;top:200px; background:white;">
   <img src="{{ MEDIA_URL }}img/ajax-loader.gif">
 </div>
+
+<hr />
+<a href="{% url midl_report %}">requests</a>
 {% endblock %}
