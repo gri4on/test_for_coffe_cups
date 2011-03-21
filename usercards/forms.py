@@ -6,17 +6,16 @@ from django import forms
 
 class CalendarWidget(forms.TextInput):
     class Media:
-        js =  (
-              settings.MEDIA_URL + 'js/jquery-1.4.4.min.js',
-              settings.MEDIA_URL + 'js/jquery-ui-1.8.10.custom.min.js',
-              settings.MEDIA_URL + 'jquery.form.js',
-              )
+        js = (
+        settings.MEDIA_URL + 'js/jquery-1.4.4.min.js',
+        settings.MEDIA_URL + 'js/jquery-ui-1.8.10.custom.min.js',
+        settings.MEDIA_URL + 'jquery.form.js',
+        )
         css = {
-              'all' : (
-                    settings.MEDIA_URL + "css/smoothness/jquery-ui-1.8.10.custom.css" ,
-                    #settings.MEDIA_URL + "jquery.ui.datepicker.css",
-                    )
-              }
+            'all': (
+            settings.MEDIA_URL + "css/smoothness/jquery-ui-1.8.10.custom.css",
+            )
+        }
 
 
     def __init__(self, attrs={}):

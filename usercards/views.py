@@ -5,7 +5,6 @@ from test_for_coffe_cups.usercards.forms import CardForm
 from django.core.context_processors import csrf
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
 
 
 def contact(request):
@@ -31,7 +30,8 @@ def edit_card(request):
             c = {"form": form}
             if form.is_valid():
                 form.save()
-            return render_to_response("edit_form.html", RequestContext(request, c))
+            return render_to_response("edit_form.html", \
+                                   RequestContext(request, c))
 
         form = CardForm(request.POST, instance=UserCard.objects.all()[0])
         if form.is_valid():
