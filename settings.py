@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # Django settings for test_for_coffe_cups project.
 import os
 

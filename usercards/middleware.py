@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from test_for_coffe_cups.usercards.models import MiddlewareData
 
 
