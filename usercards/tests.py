@@ -13,6 +13,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.db.models.query import QuerySet
 from pprint import PrettyPrinter
 
+
 def dprint(object, stream=None, indent=1, width=80, depth=None):
     # Catch any singleton Django model object that might get passed in
     if getattr(object, '__metaclass__', None):
@@ -28,6 +29,7 @@ def dprint(object, stream=None, indent=1, width=80, depth=None):
     # Pass everything through pprint in the typical way
     printer = PrettyPrinter(stream=stream, indent=indent, width=width, depth=depth)
     printer.pprint(object)
+
 
 class UserCardTest(TestCase):
     def setUp(self):
@@ -121,7 +123,7 @@ class TestEditUserCard(TestCase):
         response_auth = client.get("/edit_usercard/")
         self.failUnlessEqual(response_auth.status_code, 200)
 
-        response = client.post('/edit_usercard/',\
+        response = client.post('/edit_usercard/', \
                                  {'name'           : 'TestName',
                                   'last_name'      : 'TestLastName',
                                   'contacts'       : 'TestContacts',
@@ -178,9 +180,10 @@ class SignalsTest(TestCase):
         Test - we have in db last record with changed object
         """
         instance = UserCard.objects.latest('id')
-        action_callback(sender=UserCard, created = True, instance = instance)
+        action_callback(sender=UserCard, created=True, instance=instance)
         ins = ObjectsChanged.objects.latest('id')
         self.failUnlessEqual(instance, ins.model_object.get_object_for_this_type())
+
 
 class TestLinkToAdmin(TestCase):
 
@@ -193,7 +196,6 @@ class TestLinkToAdmin(TestCase):
         self.failUnlessEqual(response.status_code, 200)
 
         response = client.get("/")
-        print response.content
 
         # Check do we have link to admin
         self.assertContains(response, "/admin/usercards/usercard/1/")

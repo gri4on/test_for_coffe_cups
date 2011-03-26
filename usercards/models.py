@@ -8,7 +8,6 @@ from django.contrib.sessions.models import Session
 from django.contrib.auth.models import Message
 
 
-
 class UserCard(models.Model):
     """
     Basic use card
@@ -50,7 +49,7 @@ class ObjectsChanged(models.Model):
 def action_callback(sender, **kwargs):
     # Remove recursion - don`t handle ObjectChanged
     # and objects that don`t need to be reported
-    
+
     if sender in [ObjectsChanged, Session, \
                   Message, MiddlewareData]:
         return
@@ -64,9 +63,9 @@ def action_callback(sender, **kwargs):
                 False: 'edit'}
 
     content_type = ContentType.objects.get_for_model(sender)
-    ObjectsChanged.objects.create(model_object = content_type, \
-                                  object_id = kwargs['instance'].id, \
-                                  action_name = ACTIONS_NAMES[kwargs['created']])
+    ObjectsChanged.objects.create(model_object=content_type, \
+                                  object_id=kwargs['instance'].id, \
+                                  action_name=ACTIONS_NAMES[kwargs['created']])
 
 
 signals.post_save.connect(action_callback)
