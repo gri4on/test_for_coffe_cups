@@ -181,3 +181,19 @@ class SignalsTest(TestCase):
         action_callback(sender=UserCard, created = True, instance = instance)
         ins = ObjectsChanged.objects.latest('id')
         self.failUnlessEqual(instance, ins.model_object.get_object_for_this_type())
+
+class TestLinkToAdmin(TestCase):
+
+    def testHttp(self):
+        client = Client()
+        # Authenticate to get page with admin interface
+        response = client.post('/accounts/login/', {'username': 'admin', 'password': 'admin'}, follow=True)
+
+        # Test - we authenticated ?
+        self.failUnlessEqual(response.status_code, 200)
+
+        response = client.get("/")
+        print response.content
+
+        # Check do we have link to admin
+        self.assertContains(response, "/admin/usercards/usercard/1/")
