@@ -2,10 +2,32 @@
 from django.test import TestCase
 from django.test.client import Client
 from test_for_coffe_cups.usercards.models import UserCard
+from test_for_coffe_cups.usercards.models import action_callback
+from test_for_coffe_cups.usercards.models import ObjectsChanged
 import datetime
 from test_for_coffe_cups.usercards.models import MiddlewareData
 from django.conf import settings
+from django.contrib.contenttypes.models import ContentType
 
+
+from django.db.models.query import QuerySet
+from pprint import PrettyPrinter
+
+def dprint(object, stream=None, indent=1, width=80, depth=None):
+    # Catch any singleton Django model object that might get passed in
+    if getattr(object, '__metaclass__', None):
+        if object.__metaclass__.__name__ == 'ModelBase':
+            # Convert it to a dictionary
+            object = object.__dict__
+
+    # Catch any Django QuerySets that might get passed in
+    elif isinstance(object, QuerySet):
+        # Convert it to a list of dictionaries
+        object = [i.__dict__ for i in object]
+
+    # Pass everything through pprint in the typical way
+    printer = PrettyPrinter(stream=stream, indent=indent, width=width, depth=depth)
+    printer.pprint(object)
 
 class UserCardTest(TestCase):
     def setUp(self):
@@ -113,11 +135,6 @@ class TestEditUserCard(TestCase):
         self.response = response
 
     def testHttp(self):
-
-        #if self.response.status_code != 200:
-        #    print "\n\n\n\n%s\n\n\n\n" % self.response.content
-        #    print "\n\n\n\n%s\n\n\n\n" % self.response.context
-
         # Test http status code
         self.failUnlessEqual(self.response.status_code, 200)
         card = UserCard.objects.all()[0]
@@ -136,15 +153,31 @@ class TestEditUserCard(TestCase):
 
 class TestContextProcessor(TestCase):
     def testHttp_1(self):
-        """Test on context processor page"""
+        """
+        Test on context processor page
+        """
         client = Client()
         response = client.get("/ctx_proc/")
         settings_ctx = response.context['settings']
         self.failUnlessEqual(settings_ctx.DATABASES, settings.DATABASES)
 
     def testHttp_2(self):
-        """Test on main page"""
+        """
+        Test on main page
+        """
         client = Client()
         response = client.get("/")
         settings_ctx = response.context['settings']
         self.failUnlessEqual(settings_ctx.DATABASES, settings.DATABASES)
+
+
+class SignalsTest(TestCase):
+
+    def testSignal(self):
+        """
+        Test - we have in db last record with changed object
+        """
+        instance = UserCard.objects.latest('id')
+        action_callback(sender=UserCard, created = True, instance = instance)
+        ins = ObjectsChanged.objects.latest('id')
+        self.failUnlessEqual(instance, ins.model_object.get_object_for_this_type())
