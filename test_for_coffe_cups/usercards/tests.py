@@ -7,28 +7,11 @@ from test_for_coffe_cups.usercards.models import ObjectsChanged
 import datetime
 from test_for_coffe_cups.usercards.models import MiddlewareData
 from django.conf import settings
-from django.contrib.contenttypes.models import ContentType
-
-
-from django.db.models.query import QuerySet
-from pprint import PrettyPrinter
-
-
-def dprint(object, stream=None, indent=1, width=80, depth=None):
-    # Catch any singleton Django model object that might get passed in
-    if getattr(object, '__metaclass__', None):
-        if object.__metaclass__.__name__ == 'ModelBase':
-            # Convert it to a dictionary
-            object = object.__dict__
-
-    # Catch any Django QuerySets that might get passed in
-    elif isinstance(object, QuerySet):
-        # Convert it to a list of dictionaries
-        object = [i.__dict__ for i in object]
-
-    # Pass everything through pprint in the typical way
-    printer = PrettyPrinter(stream=stream, indent=indent, width=width, depth=depth)
-    printer.pprint(object)
+import os
+import shlex, subprocess
+import re
+from django.db.models import get_models
+import datetime
 
 
 class UserCardTest(TestCase):
@@ -199,3 +182,37 @@ class TestLinkToAdmin(TestCase):
 
         # Check do we have link to admin
         self.assertContains(response, "/admin/usercards/usercard/1/")
+
+
+class TestCustomCommand(TestCase):
+    def testCommandBash(self):
+        # check bash script
+        #management.call_command('printallmodels')
+        os.system("sh test_for_coffe_cups/printallmodels.sh")
+
+        # Check do we have any dat files in current path ?
+        files = os.listdir(".")
+        for _file in files:
+            if _file[-3:] == "dat":
+                self.failUnlessEqual(datetime.date.strftime(datetime.date.today(), \
+                                                            '%Y-%m-%d') in _file, True)
+
+
+        # Deleting all dat files
+        os.system("rm -Rvf *.dat")
+
+
+    def testCommand(self):
+        args = shlex.split("python test_for_coffe_cups/manage.py printallmodels")
+        process = subprocess.Popen(args, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
+        # creating list of all models
+        models_list = []
+        for model in get_models():
+            models_list.append(model.__name__)
+        # Check stdout
+        data = process.stdout.readlines()
+        for line in data:
+            res = re.findall("Model name: \'([\w]+)\' have ([\d]+) objects", line)
+            name, value = res[0]
+            # Test
+            self.failUnlessEqual(name in models_list, True)
