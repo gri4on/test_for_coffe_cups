@@ -1,2 +1,2 @@
 test:
-	cd test_for_coffe_cups && python manage.py test
+	python test_for_coffe_cups/manage.py test

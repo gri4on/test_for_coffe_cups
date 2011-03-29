@@ -5,6 +5,11 @@ from test_for_coffe_cups.usercards.models import UserCard
 import datetime
 from test_for_coffe_cups.usercards.models import MiddlewareData
 from django.conf import settings
+import os
+import shlex, subprocess
+import re
+from django.db.models import get_models
+import datetime
 
 
 class UserCardTest(TestCase):
@@ -114,10 +119,6 @@ class TestEditUserCard(TestCase):
 
     def testHttp(self):
 
-        #if self.response.status_code != 200:
-        #    print "\n\n\n\n%s\n\n\n\n" % self.response.content
-        #    print "\n\n\n\n%s\n\n\n\n" % self.response.context
-
         # Test http status code
         self.failUnlessEqual(self.response.status_code, 200)
         card = UserCard.objects.all()[0]
@@ -148,3 +149,37 @@ class TestContextProcessor(TestCase):
         response = client.get("/")
         settings_ctx = response.context['settings']
         self.failUnlessEqual(settings_ctx.DATABASES, settings.DATABASES)
+
+
+class TestCustomCommand(TestCase):
+    def testCommandBash(self):
+        # check bash script
+        #management.call_command('printallmodels')
+        os.system("sh test_for_coffe_cups/printallmodels.sh")
+
+        # Check do we have any dat files in current path ?
+        files = os.listdir(".")
+        for _file in files:
+            if _file[-3:] == "dat":
+                self.failUnlessEqual(datetime.date.strftime(datetime.date.today(), \
+                                                            '%Y-%m-%d') in _file, True)
+
+
+        # Deleting all dat files
+        os.system("rm -Rvf *.dat")
+
+
+    def testCommand(self):
+        args = shlex.split("python test_for_coffe_cups/manage.py printallmodels")
+        process = subprocess.Popen(args, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
+        # creating list of all models
+        models_list = []
+        for model in get_models():
+            models_list.append(model.__name__)
+        # Check stdout
+        data = process.stdout.readlines()
+        for line in data:
+            res = re.findall("Model name: \'([\w]+)\' have ([\d]+) objects", line)
+            name, value = res[0]
+            # Test
+            self.failUnlessEqual(name in models_list, True)
