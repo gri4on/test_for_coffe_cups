@@ -1,17 +1,19 @@
 # -*- coding: utf-8 -*-
+
 from django.test import TestCase
 from django.test.client import Client
 from test_for_coffe_cups.usercards.models import UserCard
 from test_for_coffe_cups.usercards.models import action_callback
 from test_for_coffe_cups.usercards.models import ObjectsChanged
-import datetime
 from test_for_coffe_cups.usercards.models import MiddlewareData
 from django.conf import settings
 import os
-import shlex, subprocess
+import shlex
+import subprocess
 import re
 from django.db.models import get_models
 import datetime
+from django.contrib.auth.models import User
 
 
 class UserCardTest(TestCase):
@@ -99,7 +101,7 @@ class TestEditUserCard(TestCase):
 
         # redirect to auth page
         self.failUnlessEqual(response_auth.status_code, 302)
-        response_auth = self.client.post('/accounts/login/',\
+        response_auth = self.client.post('/accounts/login/', \
                             {'username': 'admin', 'password': 'admin'})
         # Redirect to edit page
         self.failUnlessEqual(response_auth.status_code, 302)
@@ -165,7 +167,8 @@ class SignalsTest(TestCase):
         instance = UserCard.objects.latest('id')
         action_callback(sender=UserCard, created=True, instance=instance)
         ins = ObjectsChanged.objects.latest('id')
-        self.failUnlessEqual(instance, ins.model_object.get_object_for_this_type())
+        self.failUnlessEqual(instance, \
+                   ins.model_object.get_object_for_this_type())
 
 
 class TestLinkToAdmin(TestCase):
@@ -173,7 +176,8 @@ class TestLinkToAdmin(TestCase):
     def testHttp(self):
         client = Client()
         # Authenticate to get page with admin interface
-        response = client.post('/accounts/login/', {'username': 'admin', 'password': 'admin'}, follow=True)
+        response = client.post('/accounts/login/', \
+                  {'username': 'admin', 'password': 'admin'}, follow=True)
 
         # Test - we authenticated ?
         self.failUnlessEqual(response.status_code, 200)
@@ -194,13 +198,11 @@ class TestCustomCommand(TestCase):
         files = os.listdir(".")
         for _file in files:
             if _file[-3:] == "dat":
-                self.failUnlessEqual(datetime.date.strftime(datetime.date.today(), \
-                                                            '%Y-%m-%d') in _file, True)
-
+                self.failUnlessEqual(datetime.date.strftime(\
+                         datetime.date.today(), '%Y-%m-%d') in _file, True)
 
         # Deleting all dat files
         os.system("rm -Rvf *.dat")
-
 
     def testCommand(self):
         args = shlex.split("python test_for_coffe_cups/manage.py printallmodels")
@@ -216,3 +218,48 @@ class TestCustomCommand(TestCase):
             name, value = res[0]
             # Test
             self.failUnlessEqual(name in models_list, True)
+
+
+class TestPriority(TestCase):
+    def setUp(self):
+        # create 10 middleware objects
+        user = User.objects.all()[0]
+        for n in xrange(0, 100, 10):
+            m = MiddlewareData()
+            m.method = "GET"
+            m.uri = "/"
+            m.user = user
+            m.lang = "EN_en"
+            m.addr = "127.0.0.1"
+            m.user_agent = "Unknown User agent"
+            m.priority = n
+            m.save()
+
+    def testPriority(self):
+        client = Client()
+        response = client.get("/middleware/")
+        self.failUnlessEqual(response.status_code, 200)
+        midl = response.context['middleware_list']
+        # check for sorting by id
+        id_ = 0
+        for midl_obj in midl:
+            id_ += 1
+            self.failUnlessEqual(midl_obj.id, id_)
+
+        # Check for sorting by priority incrase
+        response = client.get("/middleware/?sort=increase")
+        self.failUnlessEqual(response.status_code, 200)
+        midl = response.context['middleware_list']
+        priority = 0
+        for midl_obj in midl:
+            self.failUnlessEqual(midl_obj.priority >= priority, True)
+            priority = midl_obj.priority
+
+        # Check for sorting by priority decrase
+        response = client.get("/middleware/?sort=decrease")
+        self.failUnlessEqual(response.status_code, 200)
+        midl = response.context['middleware_list']
+        priority = 200
+        for midl_obj in midl:
+            self.failUnlessEqual(midl_obj.priority <= priority, True)
+            priority = midl_obj.priority
