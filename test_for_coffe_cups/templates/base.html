@@ -15,7 +15,10 @@
 </div>
 </div>
 <div id="navigation">
+    {% if nomenu %}
+    {% else %}
 {% include "menu.html" %}
+    {% endif %}
 </div>
 </div>
 </body>
