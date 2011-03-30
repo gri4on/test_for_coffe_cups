@@ -3,10 +3,48 @@
 {% block header %}<h1>MiddlewareeReport: saved all requests</h1>{% endblock %}
 
 {% block content %}
-<table border=1>
-  <tr><td>Time</td><td>Method</td><td>URI</td> <td>User</td><td>Language</td> <td>IP</td> <td>User Agent</td> </tr>
-  {% for middleware in middleware_list %}
-  <tr><td>{{ middleware.time }}</td><td>{{ middleware.method }}</td><td>{{ middleware.uri }}</td><td>{{ middleware.user }}</td><td>{{ middleware.lang }}</td> <td>{{ middleware.addr }}</td><td> {{ middleware.user_agent }} </td></tr>
-  {% endfor %}
-</table>
+    <table border=1>
+        <tr>
+            <td>Id</td>
+            <td>Time</td>
+            <td>Method</td>
+            <td>URI</td>
+            <td>User</td>
+            <td>Language</td>
+            <td>IP</td>
+            <td>User Agent</td>
+            <td>
+                {% if sorting == "increase" %}
+                <img src="{{ settings.MEDIA_URL }}img/orange-arrow-hi_up.png" style="float:left;"></img>
+                <a href="{% url midl_report %}?sort=decrease">Priority</a>
+                {% endif %}
+                {% if sorting == "decrease" %}
+                <img src="{{ settings.MEDIA_URL }}img/orange-arrow-hi_down.png" style="float:left;"></img>
+                <a href="{% url midl_report %}?sort=none">Priority</a>
+                {% endif %}
+                {% if sorting == "none" %}
+                <a href="{% url midl_report %}?sort=increase">Priority</a>
+                {% endif %}
+            </td>
+        </tr>
+        {% for middleware in middleware_list %}
+            <tr>
+                <td>{{ middleware.id }}</td>
+                <td>{{ middleware.time }}</td>
+                <td>{{ middleware.method }}</td>
+                <td>{{ middleware.uri }}</td>
+                <td>{{ middleware.user }}</td>
+                <td>{{ middleware.lang }}</td>
+                <td>{{ middleware.addr }}</td>
+                <td> {{ middleware.user_agent }} </td>
+                <td>
+                    <form method="POST">{% csrf_token %}
+                        <input name="id" type="hidden" value="{{ middleware.id }}"></input>
+                        <input name="priority" value="{{ middleware.priority }}"></input>
+                        <input value="set" type="submit"></input>
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
 {% endblock %}

@@ -34,6 +34,7 @@ class MiddlewareData(models.Model):
     lang = models.CharField(max_length=255, null=True, blank=True)
     addr = models.CharField(max_length=255, null=True, blank=True)
     user_agent = models.CharField(max_length=255, null=True, blank=True)
+    priority = models.IntegerField(default=0)
 
 
 class ObjectsChanged(models.Model):
