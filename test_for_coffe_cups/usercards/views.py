@@ -8,6 +8,8 @@ from test_for_coffe_cups.usercards.forms import CardForm
 from django.core.context_processors import csrf
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_protect
+from django.utils.datastructures import MultiValueDictKeyError
 
 
 def contact(request):
@@ -48,13 +50,37 @@ def edit_card(request):
                                    RequestContext(request, c))
 
 
+@csrf_protect
 def report_middleware(request):
     """
     Show all stored requests
     """
+    if request.method == "POST":
+        # get form (set priority for object)
+        midlware = MiddlewareData.objects.get(id=request.POST['id'])
+        midlware.priority = int(request.POST['priority'])
+        # save old timestamp
+
+        midlware.save()
+
     # Show only first 10 requests
-    c = {"middleware_list" : MiddlewareData.objects.all()[:10]}
+    try:
+        sorting = request.GET['sort']
+        if sorting not in ['none', 'increase', 'decrease']:
+            sorting = 'none'
+    except MultiValueDictKeyError:
+        sorting = 'none'
+    if sorting == 'increase':
+        order = "priority"
+    elif sorting == "decrease":
+        order = "-priority"
+    else:
+        # by default we order by id
+        order = "id"
+    c = {"middleware_list": \
+          MiddlewareData.objects.filter(id__lte=10).order_by(order)}
     c['card'] = UserCard.objects.all()[0]
+    c['sorting'] = sorting
     return render_to_response("middleware_report.html", \
                                    RequestContext(request, c))
 
@@ -63,6 +89,6 @@ def context_processor(request):
     """
     Show settings from settings file, by context processor
     """
-    c = {"card" : UserCard.objects.all()[0]}
+    c = {"card": UserCard.objects.all()[0]}
     return render_to_response("settings.html", \
                                    RequestContext(request, c))
