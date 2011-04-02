@@ -28,7 +28,16 @@
             </td>
         </tr>
         {% for middleware in middleware_list %}
+            {% if error %}
+            {% if middleware.id == error_obj_id %}
+            <tr class="error">
+                <td colspan="9">please correct next lines next lines</td>
+            </tr>
+            <tr class="error">
+            {% else %}
             <tr>
+            {% endif %}
+            {% endif %}
                 <td>{{ middleware.id }}</td>
                 <td>{{ middleware.time }}</td>
                 <td>{{ middleware.method }}</td>
@@ -40,7 +49,15 @@
                 <td>
                     <form method="POST">{% csrf_token %}
                         <input name="id" type="hidden" value="{{ middleware.id }}"></input>
+                        {% if error %}
+                        {% if error_obj_id == middleware.id %}
+                        <input name="priority" value="{{ error_value }}"></input>
+                        {% else %}
                         <input name="priority" value="{{ middleware.priority }}"></input>
+                        {% endif %}
+                        {% else %}
+                        <input name="priority" value="{{ middleware.priority }}"></input>
+                        {% endif %}
                         <input value="set" type="submit"></input>
                     </form>
                 </td>

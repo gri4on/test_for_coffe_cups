@@ -55,13 +55,22 @@ def report_middleware(request):
     """
     Show all stored requests
     """
+    # creating context
+    c = {}
+    c['error'] = False
+
     if request.method == "POST":
         # get form (set priority for object)
         midlware = MiddlewareData.objects.get(id=request.POST['id'])
-        midlware.priority = int(request.POST['priority'])
-        # save old timestamp
-
-        midlware.save()
+        try:
+            midlware.priority = int(request.POST['priority'])
+            # save new priority
+            midlware.save()
+        except ValueError:
+            # if error - just don`t do anything
+                c['error'] = True
+                c['error_obj_id'] = int(request.POST['id'])
+                c['error_value'] = request.POST['priority']
 
     # Show only first 10 requests
     try:
@@ -77,8 +86,7 @@ def report_middleware(request):
     else:
         # by default we order by id
         order = "id"
-    c = {"middleware_list": \
-          MiddlewareData.objects.filter(id__lte=10).order_by(order)}
+    c["middleware_list"] = MiddlewareData.objects.filter(id__lte=10).order_by(order)
     c['card'] = UserCard.objects.all()[0]
     c['sorting'] = sorting
     return render_to_response("middleware_report.html", \
