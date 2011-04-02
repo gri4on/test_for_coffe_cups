@@ -53,3 +53,7 @@ div#right_part {
     /*float: left; */
     margin-left: 25%;
 }
+
+.error {
+    background-color:red;
+}
