@@ -8,14 +8,17 @@ body {
     font-family: Georgia, serif
 }
 
-p {
+
+div#navigation p {
     margin: 0 10px 10px
 }
 
-a {
+
+div#navigation a {
     display: block;
     padding: 10px
 }
+
 
 div#header h1 {
     height: 80px;
