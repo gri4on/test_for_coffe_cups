@@ -15,9 +15,7 @@ class CalendarWidget(forms.TextInput):
         css = {
             'all': (
             settings.MEDIA_URL + "css/smoothness/jquery-ui-1.8.10.custom.css",
-            )
-        }
-
+            )}
 
     def __init__(self, attrs={}):
         super(CalendarWidget, self).__init__(attrs={'class': 'vDateField',
@@ -28,5 +26,4 @@ class CardForm(ModelForm):
     class Meta:
         model = UserCard
         widgets = {
-            'date_birth': CalendarWidget
-        }
+            'date_birth': CalendarWidget}
