@@ -29,7 +29,8 @@ div#header h1 {
 }
 
 div#content p {
-    line-height: 1.4
+    line-height: 1.4;
+    margin: 0px;
 }
 
 div#wrapper {
