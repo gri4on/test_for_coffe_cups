@@ -45,6 +45,7 @@ def edit_card(request):
             form.save()
     c = {"form": CardForm(initial=model_to_dict(UserCard.objects.all()[0]))}
     c['card'] = UserCard.objects.all()[0]
+    c['nomenu'] = True
     c.update(csrf(request))
     return render_to_response("edit_card.html", \
                                    RequestContext(request, c))
