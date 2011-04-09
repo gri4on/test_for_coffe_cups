@@ -15,11 +15,11 @@
             <td>User Agent</td>
             <td>
                 {% if sorting == "increase" %}
-                <img src="{{ settings.MEDIA_URL }}img/orange-arrow-hi_up.png" style="float:left;"></img>
+                    <p style="float:left; font-size:18px;">&uarr;</p>
                 <a href="{% url midl_report %}?sort=decrease">Priority</a>
                 {% endif %}
                 {% if sorting == "decrease" %}
-                <img src="{{ settings.MEDIA_URL }}img/orange-arrow-hi_down.png" style="float:left;"></img>
+                    <p style="float:left; font-size:18px;">&darr;</p>
                 <a href="{% url midl_report %}?sort=none">Priority</a>
                 {% endif %}
                 {% if sorting == "none" %}
