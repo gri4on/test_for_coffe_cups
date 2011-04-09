@@ -15,11 +15,11 @@
             <td>User Agent</td>
             <td>
                 {% if sorting == "increase" %}
-                <img src="{{ settings.MEDIA_URL }}img/orange-arrow-hi_up.png" style="float:left;"></img>
+                    <p style="float:left; font-size:18px;">&uarr;</p>
                 <a href="{% url midl_report %}?sort=decrease">Priority</a>
                 {% endif %}
                 {% if sorting == "decrease" %}
-                <img src="{{ settings.MEDIA_URL }}img/orange-arrow-hi_down.png" style="float:left;"></img>
+                    <p style="float:left; font-size:18px;">&darr;</p>
                 <a href="{% url midl_report %}?sort=none">Priority</a>
                 {% endif %}
                 {% if sorting == "none" %}
@@ -31,7 +31,7 @@
             {% if error %}
             {% if middleware.id == error_obj_id %}
             <tr class="error">
-                <td colspan="9">please correct next lines next lines</td>
+                <td colspan="9">Please correct the errors below: priority filed must be integer</td>
             </tr>
             <tr class="error">
             {% else %}

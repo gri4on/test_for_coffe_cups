@@ -12,9 +12,9 @@
        $("#id_date_birth").datepicker({ 
           changeMonth: true,
           changeYear : true,
-          dateFormat : 'yy-mm-dd',
+          dateFormat : 'yy-mm-dd'
        });
-   };
+   }
 
    // Create datePicker
    enableDatePicker();
@@ -27,7 +27,7 @@
 
     // Show loader image
     $("#loader").css('display', 'block').animate({opacity:1}, 'fast');
-   };
+   }
 
   function onAjaxFinish() {
     var change_form = $($("#change_form")[0]);
@@ -38,19 +38,19 @@
     change_form.find('input').each(function(index, value) {value.disabled=false;});
     change_form.find('textarea').each(function(index, value) {value.disabled=false;});
     enableDatePicker();
-  };
+  }
    
   // prepare Options Object 
   var options = { 
       target:     '#edit_form',
       beforeSubmit: onAjaxRun, // handler that runs before submit
       success: onAjaxFinish
-  }; 
+  };
  
   // Create ajaxForm form jquery.form plugin
   $("#change_form").ajaxForm(options);
  
-  })
+  });
 /* ]]> */
 </script>
 <div id="edit_form">

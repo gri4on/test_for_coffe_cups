@@ -109,15 +109,15 @@ class TestEditUserCard(TestCase):
         self.failUnlessEqual(response_auth.status_code, 200)
 
         response = client.post('/edit_usercard/', \
-                                 {'name'           : 'TestName',
-                                  'last_name'      : 'TestLastName',
-                                  'contacts'       : 'TestContacts',
-                                  'email'          : 'test@example.com',
-                                  'jabber'         : 'TestJabber',
-                                  'skype'          : 'TestSkype',
-                                  'date_birth'     : '1917-11-7',
-                                  'other_contacts' : 'TestOtherContacts',
-                                  'bio'            : 'TestBio'})
+                                            {'name': 'TestName',
+                                        'last_name': 'TestLastName',
+                                         'contacts': 'TestContacts',
+                                            'email': 'test@example.com',
+                                           'jabber': 'TestJabber',
+                                            'skype': 'TestSkype',
+                                       'date_birth': '1917-11-7',
+                                   'other_contacts': 'TestOtherContacts',
+                                              'bio': 'TestBio'})
 
         self.response = response
 
@@ -190,6 +190,8 @@ class TestLinkToAdmin(TestCase):
 
 class TestCustomCommand(TestCase):
     def testCommandBash(self):
+        # Create clean envirounment - removing old "*.dat" files
+        os.system("rm -Rvf *.dat") 
         # check bash script
         #management.call_command('printallmodels')
         os.system("sh test_for_coffe_cups/printallmodels.sh")
@@ -201,12 +203,14 @@ class TestCustomCommand(TestCase):
                 self.failUnlessEqual(datetime.date.strftime(\
                          datetime.date.today(), '%Y-%m-%d') in _file, True)
 
-        # Deleting all dat files
-        os.system("rm -Rvf *.dat")
+        # Deleting all dat files after tests
+        os.system("rm -Rvf *.dat") 
 
     def testCommand(self):
-        args = shlex.split("python test_for_coffe_cups/manage.py printallmodels")
-        process = subprocess.Popen(args, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
+        args = shlex.split('python test_for_coffe_cups/manage.py ' \
+                           'printallmodels')
+        process = subprocess.Popen(args, stderr=subprocess.PIPE, \
+                                   stdout=subprocess.PIPE)
         # creating list of all models
         models_list = []
         for model in get_models():
@@ -214,7 +218,8 @@ class TestCustomCommand(TestCase):
         # Check stdout
         data = process.stdout.readlines()
         for line in data:
-            res = re.findall("Model name: \'([\w]+)\' have ([\d]+) objects", line)
+            res = re.findall("Model name: \'([\w]+)\' have ([\d]+) objects", \
+                             line)
             name, value = res[0]
             # Test
             self.failUnlessEqual(name in models_list, True)
