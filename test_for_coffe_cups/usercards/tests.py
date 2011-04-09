@@ -190,6 +190,8 @@ class TestLinkToAdmin(TestCase):
 
 class TestCustomCommand(TestCase):
     def testCommandBash(self):
+        # Create clean envirounment - removing old "*.dat" files
+        os.system("rm -Rvf *.dat") 
         # check bash script
         #management.call_command('printallmodels')
         os.system("sh test_for_coffe_cups/printallmodels.sh")
@@ -201,8 +203,8 @@ class TestCustomCommand(TestCase):
                 self.failUnlessEqual(datetime.date.strftime(\
                          datetime.date.today(), '%Y-%m-%d') in _file, True)
 
-        # Deleting all dat files
-        os.system("rm -Rvf *.dat")
+        # Deleting all dat files after tests
+        os.system("rm -Rvf *.dat") 
 
     def testCommand(self):
         args = shlex.split('python test_for_coffe_cups/manage.py ' \
