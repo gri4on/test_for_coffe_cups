@@ -17,7 +17,6 @@ def contact(request):
     Handler for main page of test
     """
     c = {"card": UserCard.objects.all()[0]}
-    c['card'] = UserCard.objects.all()[0]
     return render_to_response("contacts.html", \
                                    RequestContext(request, c))
 
