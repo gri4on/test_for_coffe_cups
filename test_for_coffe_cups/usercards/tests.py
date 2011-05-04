@@ -14,6 +14,7 @@ import re
 from django.db.models import get_models
 import datetime
 from django.contrib.auth.models import User
+from django.core.urlresolvers import reverse
 
 
 class UserCardTest(TestCase):
@@ -38,7 +39,7 @@ class UserCardTest(TestCase):
         Test http response, and context
         """
         client = Client()
-        response = client.get("/")
+        response = client.get(reverse("contact_home"))
         # Test http code
         self.failUnlessEqual(response.status_code, 200)
         # Test context
@@ -66,7 +67,7 @@ class UserCardTest(TestCase):
 class TestMiddleware(TestCase):
     def setUp(self):
         client = Client()
-        response = client.get("/middleware/")
+        response = client.get(reverse("midl_report"))
         self.response = response
 
     def testHttp(self):
@@ -97,18 +98,18 @@ class TestEditUserCard(TestCase):
         #  2. Test http auth
         #     (post auth data and check for redirect to 'edit page')
         #  3. Edit data on page (post )
-        response_auth = client.get('/edit_usercard/')
+        response_auth = client.get(reverse('card_edit'))
 
         # redirect to auth page
         self.failUnlessEqual(response_auth.status_code, 302)
-        response_auth = self.client.post('/accounts/login/', \
+        response_auth = self.client.post(reverse('login_url'), \
                             {'username': 'admin', 'password': 'admin'})
         # Redirect to edit page
         self.failUnlessEqual(response_auth.status_code, 302)
-        response_auth = client.get("/edit_usercard/")
+        response_auth = client.get(reverse('card_edit'))
         self.failUnlessEqual(response_auth.status_code, 200)
 
-        response = client.post('/edit_usercard/', \
+        response = client.post(reverse('card_edit'), \
                                             {'name': 'TestName',
                                         'last_name': 'TestLastName',
                                          'contacts': 'TestContacts',
@@ -144,7 +145,7 @@ class TestContextProcessor(TestCase):
         Test on context processor page
         """
         client = Client()
-        response = client.get("/ctx_proc/")
+        response = client.get(reverse("ctx_proc"))
         settings_ctx = response.context['settings']
         self.failUnlessEqual(settings_ctx.DATABASES, settings.DATABASES)
 
@@ -153,7 +154,7 @@ class TestContextProcessor(TestCase):
         Test on main page
         """
         client = Client()
-        response = client.get("/")
+        response = client.get(reverse("contact_home"))
         settings_ctx = response.context['settings']
         self.failUnlessEqual(settings_ctx.DATABASES, settings.DATABASES)
 
@@ -176,13 +177,13 @@ class TestLinkToAdmin(TestCase):
     def testHttp(self):
         client = Client()
         # Authenticate to get page with admin interface
-        response = client.post('/accounts/login/', \
+        response = client.post(reverse('login_url'), \
                   {'username': 'admin', 'password': 'admin'}, follow=True)
 
         # Test - we authenticated ?
         self.failUnlessEqual(response.status_code, 200)
 
-        response = client.get("/")
+        response = client.get(reverse("contact_home"))
 
         # Check do we have link to admin
         self.assertContains(response, "/admin/usercards/usercard/1/")
@@ -242,7 +243,7 @@ class TestPriority(TestCase):
 
     def testPriority(self):
         client = Client()
-        response = client.get("/middleware/")
+        response = client.get(reverse("midl_report"))
         self.failUnlessEqual(response.status_code, 200)
         midl = response.context['middleware_list']
         # check for sorting by id
@@ -252,7 +253,7 @@ class TestPriority(TestCase):
             self.failUnlessEqual(midl_obj.id, id_)
 
         # Check for sorting by priority incrase
-        response = client.get("/middleware/?sort=increase")
+        response = client.get('%s?sort=%s' % (reverse("midl_report"), "increase"))
         self.failUnlessEqual(response.status_code, 200)
         midl = response.context['middleware_list']
         priority = 0
@@ -261,7 +262,7 @@ class TestPriority(TestCase):
             priority = midl_obj.priority
 
         # Check for sorting by priority decrase
-        response = client.get("/middleware/?sort=decrease")
+        response = client.get("%s?sort=%s" % (reverse('midl_report'), "decrease"))
         self.failUnlessEqual(response.status_code, 200)
         midl = response.context['middleware_list']
         priority = 200
