@@ -58,7 +58,7 @@ MEDIA_ROOT = SITE_ROOT + MEDIA_PREFIX
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash if there is a path component (optional in other cases).
 # Examples: "http://media.lawrence.com/media/", "http://example.com/media/"
-MEDIA_URL = 'http://localhost:8000' + MEDIA_PREFIX
+MEDIA_URL = MEDIA_PREFIX
 
 # Absolute path to the directory that holds static files.
 # Example: "/home/media/media.lawrence.com/static/"

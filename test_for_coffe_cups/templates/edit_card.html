@@ -19,6 +19,13 @@
    // Create datePicker
    enableDatePicker();
  
+  // prepare Options Object 
+  var options = { 
+      target:     '#edit_form',
+      beforeSubmit: onAjaxRun, // handler that runs before submit
+      success: onAjaxFinish
+  };
+
    function onAjaxRun(){
     var change_form = $($("#change_form")[0]);
     // Disable form for User
@@ -37,16 +44,12 @@
     // Enable editable tags: input and textarea
     change_form.find('input').each(function(index, value) {value.disabled=false;});
     change_form.find('textarea').each(function(index, value) {value.disabled=false;});
+    // create new datapicker
     enableDatePicker();
+    // create new jquery form
+    $("#change_form").ajaxForm(options);
   }
    
-  // prepare Options Object 
-  var options = { 
-      target:     '#edit_form',
-      beforeSubmit: onAjaxRun, // handler that runs before submit
-      success: onAjaxFinish
-  };
- 
   // Create ajaxForm form jquery.form plugin
   $("#change_form").ajaxForm(options);
  
