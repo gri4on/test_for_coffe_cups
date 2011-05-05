@@ -192,7 +192,7 @@ class TestLinkToAdmin(TestCase):
 class TestCustomCommand(TestCase):
     def testCommandBash(self):
         # Create clean envirounment - removing old "*.dat" files
-        os.system("rm -Rvf *.dat") 
+        os.system("rm -Rvf *.dat")
         # check bash script
         #management.call_command('printallmodels')
         os.system("sh test_for_coffe_cups/printallmodels.sh")
@@ -205,7 +205,7 @@ class TestCustomCommand(TestCase):
                          datetime.date.today(), '%Y-%m-%d') in _file, True)
 
         # Deleting all dat files after tests
-        os.system("rm -Rvf *.dat") 
+        os.system("rm -Rvf *.dat")
 
     def testCommand(self):
         args = shlex.split('python test_for_coffe_cups/manage.py ' \
@@ -253,7 +253,8 @@ class TestPriority(TestCase):
             self.failUnlessEqual(midl_obj.id, id_)
 
         # Check for sorting by priority incrase
-        response = client.get('%s?sort=%s' % (reverse("midl_report"), "increase"))
+        response = client.get('%s?sort=%s' % (reverse("midl_report"), \
+                                                            "increase"))
         self.failUnlessEqual(response.status_code, 200)
         midl = response.context['middleware_list']
         priority = 0
@@ -262,7 +263,8 @@ class TestPriority(TestCase):
             priority = midl_obj.priority
 
         # Check for sorting by priority decrase
-        response = client.get("%s?sort=%s" % (reverse('midl_report'), "decrease"))
+        response = client.get("%s?sort=%s" % (reverse('midl_report'), \
+                                                           "decrease"))
         self.failUnlessEqual(response.status_code, 200)
         midl = response.context['middleware_list']
         priority = 200
